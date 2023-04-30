@@ -194,7 +194,7 @@ function assignColors(colors,data,path) {
     return true;
   }
 
-  function createMapUsingBackTracking(svg,colors){
+  async function  createMapUsingBackTracking(svg,colors){
     d3.selectAll("path").remove();
     d3.selectAll("text").remove();
     var country =   d3.select('select[name="map-option"]').property("value");
@@ -202,7 +202,23 @@ function assignColors(colors,data,path) {
     
     var path = geoDetails[0]
     var topoJsonURL = geoDetails[1]
-    d3.json(topoJsonURL).then(function(topo) {
+    let topo;
+    try {
+      const response = await fetch(topoJsonURL);
+      topo = await response.json();
+    } catch (error) {
+      console.error('Error:', error);
+      return null;
+    }
+
+  //    d3.json(topoJsonURL, {async:false})
+  // .then(function(topoJson) {
+  //   topo = topoJson;
+  // })
+  // .catch(function(error) {
+  //   console.log(error);
+  // });
+
   var data = topojson.feature(topo, topo.objects.states);
   data.adjacentRegions = getAdjacentRegions(country)
   data.features = data.features.filter(function(d) {
@@ -259,21 +275,31 @@ svg.append("g")
           .attr("alignment-baseline", "central")
           .style("font-size", "15px");
         // }, 1000); 
-  });
+  // }
+  
+  // );
   }
 
 
 
-  function createMapUsingLocalSearch(svg, colors, maxIterations = 1000) {
+  async function createMapUsingLocalSearch(svg, colors) {
     d3.selectAll("path").remove();
     d3.selectAll("text").remove();    
     const country =  d3.select('select[name="map-option"]').property("value");
+    const maxIterations =  d3.select('input[name="max-iter-input"]').property("value");
     const geoDetails = getGeoDetails(country);
   
     const path = geoDetails[0];
     const topoJsonURL = geoDetails[1];
   
-    d3.json(topoJsonURL).then(function (topo) {
+    let topo;
+    try {
+      const response = await fetch(topoJsonURL);
+      topo = await response.json();
+    } catch (error) {
+      console.error('Error:', error);
+      return null;
+    }
       const data = topojson.feature(topo, topo.objects.states);
       data.adjacentRegions = getAdjacentRegions(country);
       data.features = data.features.filter(function (d) {
@@ -307,7 +333,7 @@ svg.append("g")
         }
       }
 
-      if (iter === maxIterations  || !checkAllStates(data)) {
+      if (iter === maxIterations  ||  !checkAllStates(data)) {
         alert("Could not find a valid solution within the given number of iterations.");
         for (var i = 0; i < data.features.length; i++) {
           var state = data.features[i];
@@ -356,8 +382,6 @@ svg.append("g")
         .attr("alignment-baseline", "central")
         .style("font-size", "15px");
       }
-
-    });
   }
   
   // Helper function to count the number of conflicts between neighboring states
@@ -413,7 +437,8 @@ svg.append("g")
   }
   
 
-  function runCSP(svg,allColors){
+  async function runCSP(svg,allColors){
+    const t0 = performance.now();
     var numColorsInput = document.getElementById("numColors");
         var numColors = Math.max(Math.min(allColors.length,parseInt(numColorsInput.value)),1) ;
         var colors = [];
@@ -427,10 +452,12 @@ svg.append("g")
         var algo = d3.select('select[name="search-option"]').property("value");
         if (algo === "backtracking")
         {
-            createMapUsingBackTracking(svg,colors)
+            await createMapUsingBackTracking(svg,colors)
         }
         else {
-            createMapUsingLocalSearch(svg,colors)
+          await createMapUsingLocalSearch(svg,colors)
         }
-
+  const t1 = performance.now();
+  const executionTime = (t1 - t0).toFixed(2);
+  document.getElementById("timer").innerHTML = `Execution time: ${executionTime} ms`;
 }
