@@ -15,3 +15,4 @@ var allColors = ["red", "green", "blue", "yellow","purple","orange","pink"];
 createMap(svg,colorScale)    
 defineMapChangeEvent(svg,colorScale)
 defineRunCSPEvent(svg,allColors)
+checkSearchOptions()

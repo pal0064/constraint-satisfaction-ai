@@ -19,23 +19,31 @@
   </head>
   <body>
     <div id="map"></div>
-    <label for="numColors">Number of colors:</label>
-    <input type="number" id="numColors" value="6">
+    <label for="numColors">Maximum Number of colors:</label>
+    <input type="number" id="numColors" value="4" max="5" min="3">
     <div id="map-container"></div>
     <div>
       <label for="Country"> Country: </label>
-      <label><input type="radio" name="map-option" class="map-option" value="india" > India</label>
-      <label><input type="radio" name="map-option" class="map-option" value="us" > US</label>
-      <label><input type="radio" name="map-option" class="map-option" value="australia" checked> Australia</label>
-      <!-- <label><input type="radio" name="map-option" class="map-option" value="japan" > Japan</label> -->
-      <!-- <label><input type="radio" name="map-option" class="map-option" value="china"> China</label> -->
+      <select name="map-option" class="map-option">
+        <option   value="austalia">Austalia</option>
+        <option value="india">India</option>
+        <option value="us">US </option>
+      </select>
     </div>
     <div>
-      <label for="Algorithm"> Alogorithm </label>
-      <label><input type="radio" name="search-option" class="search-option" value="backtracking" checked> Backtracking</label>
-      <label><input type="radio" name="search-option" class="search-option" value="local_search"> Local Search</label>
+      <label for="Algorithm: "> Algorithm </label>
+      <select name="search-option" class="search-option">
+        <option   value="backtracking">Backtracking</option>
+        <option value="local_search">Local Search</option>
+      </select>
     </div>
+    <div id="max-iter-container"></div>
+    <div>
     <button id="runCSP">Run CSP</button>
+    </div>
+    <div id="timer"></div>
+    <div>
     <script src="script.js"></script>
+  </div>
   </body>
 </html>
