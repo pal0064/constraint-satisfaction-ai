@@ -197,7 +197,7 @@ function assignColors(colors,data,path) {
   function createMapUsingBackTracking(svg,colors){
     d3.selectAll("path").remove();
     d3.selectAll("text").remove();
-    var country = d3.select('input[name="map-option"]:checked').node().value;
+    var country =   d3.select('select[name="map-option"]').property("value");
     var geoDetails =  getGeoDetails(country)
     
     var path = geoDetails[0]
@@ -266,8 +266,8 @@ svg.append("g")
 
   function createMapUsingLocalSearch(svg, colors, maxIterations = 1000) {
     d3.selectAll("path").remove();
-    d3.selectAll("text").remove();
-    const country = d3.select('input[name="map-option"]:checked').node().value;
+    d3.selectAll("text").remove();    
+    const country =  d3.select('select[name="map-option"]').property("value");
     const geoDetails = getGeoDetails(country);
   
     const path = geoDetails[0];
@@ -282,7 +282,7 @@ svg.append("g")
           d.properties.STATE_NAME !== ""
           );
       });
-  
+
       // Initialize states with random colors
       data.features.forEach((state) => {
         state.color = colors[Math.floor(Math.random() * colors.length)];
@@ -309,12 +309,23 @@ svg.append("g")
 
       if (iter === maxIterations  || !checkAllStates(data)) {
         alert("Could not find a valid solution within the given number of iterations.");
+        for (var i = 0; i < data.features.length; i++) {
+          var state = data.features[i];
+          state.color = null;
+      }
+        svg.append("g")
+            .selectAll("path")
+          .data(data.features)
+          .enter()
+          .append("path")
+          .attr("d", path)
+          .attr("id", function(d) { return d.properties.STATE_NAME; })
+          .style("fill", function(d) { 
+            return d.color; })
       }
       else{
         alert("Solution Found");
-      }
-
-      svg
+        svg
         .append("g")
         .selectAll("path")
         .data(data.features)
@@ -325,8 +336,8 @@ svg.append("g")
         .style("fill", function (d) {
           return d.color;
         });
-  
-      svg
+
+        svg
         .append("g")
         .selectAll("text")
         .data(data.features)
@@ -344,6 +355,8 @@ svg.append("g")
         .attr("text-anchor", "middle")
         .attr("alignment-baseline", "central")
         .style("font-size", "15px");
+      }
+
     });
   }
   
@@ -399,11 +412,9 @@ svg.append("g")
     return newColors[Math.floor(Math.random() * newColors.length)]; // return a random color from the new array
   }
   
-  
 
   function runCSP(svg,allColors){
-        var numColorsInput = document.getElementById("numColors");
-        var state = document.getElementById("map-container");
+    var numColorsInput = document.getElementById("numColors");
         var numColors = Math.max(Math.min(allColors.length,parseInt(numColorsInput.value)),1) ;
         var colors = [];
         while (colors.length < numColors) {
@@ -413,14 +424,13 @@ svg.append("g")
             colors.push(randomColor);
           }
         }
-        var algo = d3.select('input[name="search-option"]:checked').node().value;
-        if (algo === "backtracking"){
-            console.log(algo)
+        var algo = d3.select('select[name="search-option"]').property("value");
+        if (algo === "backtracking")
+        {
             createMapUsingBackTracking(svg,colors)
         }
-        else{
+        else {
             createMapUsingLocalSearch(svg,colors)
         }
-        
-      ;
+
 }

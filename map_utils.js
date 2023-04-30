@@ -64,7 +64,7 @@ var projection = d3.geoMercator()
 function createMap(svg){
   d3.selectAll("path").remove();
   d3.selectAll("text").remove();
-  var country = d3.select('input[name="map-option"]:checked').node().value;
+  var country =  d3.select('select[name="map-option"]').property("value");
   var geoDetails =  getGeoDetails(country)
   var path = geoDetails[0]
   var topoJsonURL = geoDetails[1]
