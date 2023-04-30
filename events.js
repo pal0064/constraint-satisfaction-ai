@@ -5,3 +5,12 @@ function defineMapChangeEvent(svg,colorScale){
       createMap(svg,colorScale);
     });
 }
+
+
+function defineRunCSPEvent(svg,allColors){
+    document.getElementById("runCSP").addEventListener("click", async function()
+    {
+    await(runCSP(svg,allColors))
+    });
+}
+

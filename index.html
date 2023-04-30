@@ -8,7 +8,7 @@
     <script src="http://d3js.org/topojson.v1.min.js"></script>
     <script src="map_utils.js"></script>
     <script src="events.js"></script>    
-    <!-- <script src="events.js"></script>   -->
+    <script src="csp_utils.js"></script>    
 <style>
       .region {
         fill: #ccc;
@@ -23,11 +23,17 @@
     <input type="number" id="numColors" value="6">
     <div id="map-container"></div>
     <div>
-      <!-- <label><input type="radio" name="map-option" class="map-option" value="india" > India</label>
-      <label><input type="radio" name="map-option" class="map-option" value="us" > US</label> -->
+      <label for="Country"> Country: </label>
+      <label><input type="radio" name="map-option" class="map-option" value="india" > India</label>
+      <label><input type="radio" name="map-option" class="map-option" value="us" > US</label>
       <label><input type="radio" name="map-option" class="map-option" value="australia" checked> Australia</label>
-      <!-- <label><input type="radio" name="map-option" class="map-option" value="japan" > Japan</label>
-      <label><input type="radio" name="map-option" class="map-option" value="china"> China</label> -->
+      <!-- <label><input type="radio" name="map-option" class="map-option" value="japan" > Japan</label> -->
+      <!-- <label><input type="radio" name="map-option" class="map-option" value="china"> China</label> -->
+    </div>
+    <div>
+      <label for="Algorithm"> Alogorithm </label>
+      <label><input type="radio" name="search-option" class="search-option" value="backtracking" checked> Backtracking</label>
+      <label><input type="radio" name="search-option" class="search-option" value="local_search"> Local Search</label>
     </div>
     <button id="runCSP">Run CSP</button>
     <script src="script.js"></script>
