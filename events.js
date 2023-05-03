@@ -29,14 +29,33 @@ function checkSearchOptions() {
         .on('change', () => {
             d3.select("#timer").text("");
             var searchOption = d3.select('select[name="search-option"]').property("value");
-            if (searchOption === 'local_search') {
+            if (searchOption === 'backtracking'){
+                d3.select('#forward_checking-options-container')
+                .html('')
+                d3.select('#max-iter-container').html('')
+            }
+            else if (searchOption === 'local_search') {
                 d3.select('#max-iter-container')
                     .html('<label for="max-iter-input"> Maximum Iterations: </label><input type="number" name="max-iter-input" id="max-iter-input" min="100"  max="10000" value="500">');
-            } else {
+                    d3.select('#forward_checking-options-container')
+                    .html('')
+                } else {
                 d3.select('#max-iter-container')
                     .html('');
+                d3.select('#forward_checking-options-container')
+                   .html(`
+                   Heuristic: 
+                   <input type="radio" id="mrv" name="forward_checking_options" value="mrv">
+                   <label for="mrv">Minimum Remaining Values</label>
+                   <input type="radio" id="dh" name="forward_checking_options" value="dh">
+                   <label for="dh">Degree Heuristic</label>
+                   <input type="radio" id="lcv" name="forward_checking_options" value="lcv">
+                   <label for="lcv">Least Constraining Value</label>
+                 `)
             }
 
         });
 
 }
+
+
