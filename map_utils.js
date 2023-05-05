@@ -1,5 +1,10 @@
+var colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 var SKIP_STATES = [
-    "American Samoa", "Guam", "Commonwealth of the Northern Mariana Islands", "Puerto Rico", "United States Virgin Islands",
+    "American Samoa",
+    "Guam",
+    "Commonwealth of the Northern Mariana Islands",
+    "Puerto Rico",
+    "United States Virgin Islands",
     "Australian Capital Territory",
     "Daman & Diu",
     "Lakshadweep",
@@ -9,13 +14,8 @@ var SKIP_STATES = [
     "NCT of Delhi"
 ]
 
-// 'New South Wales': 'red', 'Victoria': 'green',
-// Removing green from Northern Territory
-
-// Removing green from South Australia
-
 function getAdjacentRegions(country) {
-    var ausAdjacentRegions = {
+    const ausAdjacentRegions = {
         'Western Australia': ['Northern Territory', 'South Australia'],
         'Northern Territory': ['Western Australia', 'South Australia', 'Queensland'],
         'South Australia': ['Western Australia', 'Northern Territory', 'Queensland', 'New South Wales', 'Victoria'],
@@ -24,7 +24,7 @@ function getAdjacentRegions(country) {
         'Victoria': ['South Australia', 'New South Wales'],
         'Tasmania': []
     };
-    var usAdjacentRegions = {
+    const usAdjacentRegions = {
         'Alaska': ['Washington'],
         'Alabama': ['Florida', 'Georgia', 'Mississippi', 'Tennessee'],
         'Arkansas': ['Louisiana', 'Missouri', 'Mississippi', 'Oklahoma', 'Tennessee', 'Texas'],
@@ -40,7 +40,7 @@ function getAdjacentRegions(country) {
         'Iowa': ['Illinois', 'Minnesota', 'Missouri', 'Nebraska', 'South Dakota', 'Wisconsin'],
         'Idaho': ['Montana', 'Nevada', 'Oregon', 'Utah', 'Washington', 'Wyoming'],
         'Illinois': ['Iowa', 'Indiana', 'Kentucky', 'Missouri', 'Wisconsin'],
-        'Indiana': ['Illinois', 'Kentucky', 'Missouri', 'Wisconsin','Michigan','Ohio'],
+        'Indiana': ['Illinois', 'Kentucky', 'Wisconsin', 'Michigan', 'Ohio'],
         'Kansas': ['Colorado', 'Missouri', 'Nebraska', 'Oklahoma'],
         'Kentucky': ['Illinois', 'Indiana', 'Missouri', 'Ohio', 'Tennessee', 'Virginia', 'West Virginia'],
         'Louisiana': ['Arkansas', 'Mississippi', 'Texas'],
@@ -49,7 +49,7 @@ function getAdjacentRegions(country) {
         'Maine': ['New Hampshire'],
         'Michigan': ['Indiana', 'Ohio', 'Wisconsin'],
         'Minnesota': ['Iowa', 'North Dakota', 'South Dakota', 'Wisconsin'],
-        'Missouri': ['Indiana','Arkansas', 'Iowa', 'Illinois', 'Kansas', 'Kentucky', 'Nebraska', 'Oklahoma', 'Tennessee'],
+        'Missouri': ['Arkansas', 'Iowa', 'Illinois', 'Kansas', 'Kentucky', 'Nebraska', 'Oklahoma', 'Tennessee'],
         'Mississippi': ['Alabama', 'Arkansas', 'Louisiana', 'Tennessee'],
         'Montana': ['Idaho', 'North Dakota', 'South Dakota', 'Wyoming'],
         'North Carolina': ['Georgia', 'South Carolina', 'Tennessee', 'Virginia'],
@@ -73,11 +73,11 @@ function getAdjacentRegions(country) {
         'Virginia': ['District of Columbia', 'Kentucky', 'Maryland', 'North Carolina', 'Tennessee', 'West Virginia'],
         'Vermont': ['Massachusetts', 'New Hampshire', 'New York'],
         'Washington': ['Alaska', 'Idaho', 'Oregon'],
-        'Wisconsin': ['Iowa', 'Illinois', 'Michigan', 'Minnesota','Indiana'],
+        'Wisconsin': ['Iowa', 'Illinois', 'Michigan', 'Minnesota', 'Indiana'],
         'West Virginia': ['Kentucky', 'Maryland', 'Ohio', 'Pennsylvania', 'Virginia'],
         'Wyoming': ['Colorado', 'Idaho', 'Montana', 'Nebraska', 'South Dakota', 'Utah']
     }
-    var indiaAdjacentRegions = {
+    const indiaAdjacentRegions = {
         'Andaman & Nicobar Island': [],
         'Andhra Pradesh': ['Karnataka',
             'Tamil Nadu',
@@ -86,7 +86,7 @@ function getAdjacentRegions(country) {
             'Telangana'
         ],
         'Arunanchal Pradesh': ['Assam', 'Nagaland'],
-        'Assam': ['Arunanchal Pradesh', 'Manipur', 'Nagaland', 'Meghalaya', 'Tripura','Mizoram','West Bengal'],
+        'Assam': ['Arunanchal Pradesh', 'Manipur', 'Nagaland', 'Meghalaya', 'Tripura', 'Mizoram', 'West Bengal'],
         'Bihar': ['Uttar Pradesh', 'Jharkhand', 'West Bengal'],
         'Chhattisgarh': ['Andhra Pradesh', 'Madhya Pradesh', 'Telangana',
             'Odisha',
@@ -128,7 +128,7 @@ function getAdjacentRegions(country) {
         ],
         'Manipur': ['Assam', 'Nagaland', 'Mizoram'],
         'Meghalaya': ['Assam'],
-        'Mizoram': ['Assam', 'Tripura','Manipur'],
+        'Mizoram': ['Assam', 'Tripura', 'Manipur'],
         'Nagaland': ['Arunanchal Pradesh', 'Manipur', 'Assam'],
         'Odisha': ['Jharkhand',
             'Chhattisgarh',
@@ -146,7 +146,7 @@ function getAdjacentRegions(country) {
         ],
         'Sikkim': ['West Bengal'],
         'Tamil Nadu': ['Kerala', 'Karnataka', 'Andhra Pradesh'],
-        'Telangana': ['Maharashtra', 'Karnataka', 'Andhra Pradesh', 'Chhattisgarh','Odisha'],
+        'Telangana': ['Maharashtra', 'Karnataka', 'Andhra Pradesh', 'Chhattisgarh', 'Odisha'],
         'Tripura': ['Assam', 'Mizoram'],
         'Uttar Pradesh': ['Uttarakhand',
             'Madhya Pradesh',
@@ -172,56 +172,55 @@ function getAdjacentRegions(country) {
 
 }
 
-
-
 function getGeoDetails(country) {
+    let projection;
+    let topoJsonURL;
     switch (country) {
         case 'australia':
-            var projection = d3.geoMercator()
+            projection = d3.geoMercator()
                 .center([140, -24])
                 .scale(1000);
-            var topoJsonURL = "https://raw.githubusercontent.com/pal0064/maps/master/topojsons/australia_states.json";
+            topoJsonURL = "https://raw.githubusercontent.com/pal0064/maps/master/topojsons/australia_states.json";
             break;
         case 'us':
-            var projection = d3.geoAlbersUsa()
+            projection = d3.geoAlbersUsa()
                 .scale(1200)
                 .translate([width / 2, height / 2]);
 
-            var topoJsonURL = "https://raw.githubusercontent.com/pal0064/maps/master/topojsons/usa_states.json"
+            topoJsonURL = "https://raw.githubusercontent.com/pal0064/maps/master/topojsons/usa_states.json"
             break;
         case 'japan':
-            var projection = d3.geoMercator()
+            projection = d3.geoMercator()
                 .center([139.6503, 35.6762])
                 .scale(1300)
                 .translate([width / 2, height / 2]);
-            var topoJsonURL = "https://raw.githubusercontent.com/pal0064/maps/master/topojsons/japan_states.json"
+            topoJsonURL = "https://raw.githubusercontent.com/pal0064/maps/master/topojsons/japan_states.json"
             break;
         case 'india':
-            var projection = d3.geoMercator()
+            projection = d3.geoMercator()
                 .center([78.9629, 22.5937])
                 .scale(1000)
                 .translate([width / 2, height / 2]);
-            var topoJsonURL = "https://raw.githubusercontent.com/pal0064/maps/master/topojsons/india_states.json"
+            topoJsonURL = "https://raw.githubusercontent.com/pal0064/maps/master/topojsons/india_states.json"
             break;
 
         case 'china':
-            var projection = d3.geoMercator()
+            projection = d3.geoMercator()
                 .center([105, 35])
                 .scale(800)
                 .translate([width / 2, height / 2]);
-            var topoJsonURL = "https://raw.githubusercontent.com/pal0064/maps/master/topojsons/china_states.json"
+            topoJsonURL = "https://raw.githubusercontent.com/pal0064/maps/master/topojsons/china_states.json"
             break;
 
         default:
-            var projection = d3.geoMercator()
+            projection = d3.geoMercator()
                 .center([140, -24])
                 .scale(1000);
-            var topoJsonURL = "https://raw.githubusercontent.com/pal0064/maps/master/topojsons/australia_states.json";
+            topoJsonURL = "https://raw.githubusercontent.com/pal0064/maps/master/topojsons/australia_states.json";
 
             break;
     }
-    // Create a path generator
-    var path = d3.geoPath()
+    const path = d3.geoPath()
         .projection(projection);
     return [path, topoJsonURL];
 }
@@ -229,115 +228,88 @@ function getGeoDetails(country) {
 function createMap(svg) {
     d3.selectAll("path").remove();
     d3.selectAll("text").remove();
-    var country = d3.select('select[name="map-option"]').property("value");
-    var geoDetails = getGeoDetails(country)
-    var path = geoDetails[0]
-    var topoJsonURL = geoDetails[1]
+    const country = d3.select('select[name="map-option"]').property("value");
+    const geoDetails = getGeoDetails(country)
+    const path = geoDetails[0]
+    const topoJsonURL = geoDetails[1]
     d3.json(topoJsonURL).then(function(topo) {
-        var data = topojson.feature(topo, topo.objects.states);
+        let data = topojson.feature(topo, topo.objects.states);
         data.features = data.features.filter(function(d) {
-            // console.log(data.features)
             return !SKIP_STATES.includes(d.properties.STATE_NAME) &&
                 d.properties.STATE_NAME !== "";
         });
-        svg.append("g")
-            .selectAll("path")
-            .data(data.features)
-            .enter()
-            .append("path")
-            //     .transition()
-            //     .ease(d3.easePoly)
-            // .duration(500)
-            // .delay(function(d, i) { return i * 500; }) // Add delay for each feature
-            .attr("d", path)
-            .attr("id", function(d) {
-                return d.properties.STATE_NAME;
-            })
-            .style("fill", function(d, i) {
-                // Color the map based on CSP algorithm
-                // Here you can write your own CSP algorithm based on your data
-                return colorScale(i);
-                // colors[i%colors.length]
-            });
-        svg.append("g")
-            .selectAll("text")
-            .data(data.features)
-            .enter()
-            .append("text")
-            .text(function(d) {
-                return d.properties.STATE_NAME;
-            })
-            .attr("x", function(d) {
-                return path.centroid(d)[0];
-            })
-            .attr("y", function(d) {
-                return path.centroid(d)[1];
-            })
-            .attr("text-anchor", "middle")
-            .attr("alignment-baseline", "central")
-            .style("font-size", "10px");
-
+        data.path = path
+        showMap(svg, data)
+        showText(svg, data)
     });
 
 }
 
-function createMapColoredViz(svg,data,animate=true){
-    if(animate){
-         svg
+function createMapColoredViz(svg, data, animate = true) {
+    if (animate) {
+        svg
             .append("g")
             .selectAll("path")
             .data(data.features)
             .enter()
             .append("path")
             .transition()
-        .ease(d3.easePoly)
-        .duration(100)
-        .delay(function(d, i) {
-            return i * 100;
-        }) // Add delay for each feature
-        .attr("d", data.path)
-        .attr("id", function(d) {
+            .ease(d3.easePoly)
+            .duration(100)
+            .delay(function(d, i) {
+                return i * 100;
+            })
+            .attr("d", data.path)
+            .attr("id", function(d) {
+                return d.properties.STATE_NAME;
+            })
+            .style("fill", function(d) {
+                return d.color;
+            });
+    } else {
+        showMap(svg, data, color = true)
+
+    }
+
+    showText(svg, data)
+}
+
+
+function showText(svg, data) {
+    svg.append("g")
+        .selectAll("text")
+        .data(data.features)
+        .enter()
+        .append("text")
+        .text(function(d) {
             return d.properties.STATE_NAME;
         })
-        .style("fill", function(d) {
-            return d.color;
-        });
-    }
-    else{
+        .attr("x", function(d) {
+            return data.path.centroid(d)[0];
+        })
+        .attr("y", function(d) {
+            return data.path.centroid(d)[1];
+        })
+        .attr("text-anchor", "middle")
+        .attr("alignment-baseline", "central")
+        .style("font-size", "10px");
 
-        svg
-        .append("g")
+}
+
+function showMap(svg, data, color = false) {
+    svg.append("g")
         .selectAll("path")
         .data(data.features)
         .enter()
         .append("path")
-    .attr("d", data.path)
-    .attr("id", function(d) {
-        return d.properties.STATE_NAME;
-    })
-    .style("fill", function(d) {
-        return d.color;
-    });
-
-    }
-            
-            svg
-            .append("g")
-            .selectAll("text")
-            .data(data.features)
-            .enter()
-            .append("text")
-            .text(function(d) {
-                return d.properties.STATE_NAME;
-            })
-            .attr("x", function(d) {
-                return data.path.centroid(d)[0];
-            })
-            .attr("y", function(d) {
-                return data.path.centroid(d)[1];
-            })
-            .attr("text-anchor", "middle")
-            .attr("alignment-baseline", "central")
-            .style("font-size", "15px");
-
+        .attr("d", data.path)
+        .attr("id", function(d) {
+            return d.properties.STATE_NAME;
+        })
+        .style("fill", function(d, i) {
+            if (color == true) {
+                return d.color
+            }
+            return colorScale(i);
+        });
 }

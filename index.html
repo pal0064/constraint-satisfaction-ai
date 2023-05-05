@@ -6,6 +6,7 @@
     <title>Map Coloring Visualization</title>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script src="html_utils.js"></script>    
     <script src="map_utils.js"></script>
     <script src="events.js"></script>    
     <script src="csp_utils.js"></script>    
@@ -67,10 +68,8 @@
       <select name="search-option" class="search-option">
         <option   value="backtracking">Backtracking</option>
         <option   value="forward_checking">Forward Check</option>
-        <!-- <option value="local_search">Local Search</option> -->
       </select>
     </div>
-    <div id="max-iter-container"></div>
   <div id="forward_checking-options-container"></div> 
     <div>
     <button id="runCSP">Run CSP
