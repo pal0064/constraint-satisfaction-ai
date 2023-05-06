@@ -57,29 +57,31 @@
     <div id="map-container"></div>
     <div>
       <label for="Country"> Country: </label>
-      <select name="map-option" class="map-option">
-        <option   value="austalia">Australia</option>
+      <select name="map-option" class="map-option" id="map-option">
+        <option   value="australia">Australia</option>
         <option value="india">India</option>
         <option value="us">US </option>
       </select>
     </div>
     <div>
       <label for="Algorithm: "> Algorithm </label>
-      <select name="search-option" class="search-option">
-        <option   value="backtracking">Backtracking</option>
-        <option   value="forward_checking">Forward Check</option>
+      <select name="search-option" class="search-option" id='search-option'>
+        <option  value="backtracking">Backtracking</option>
+        <option  value="forward_checking">Forward Check</option>
       </select>
     </div>
   <div id="forward_checking-options-container"></div> 
-    <div>
-    <button id="runCSP">Run CSP
-      <span id="loadingIndicator"></span>
-    </button>
-    </div>
-    <div id="timer"></div>
+
     <div>
       <input type="checkbox" id="logs" name="logs" value="false"> Enable Logs </input>
     </div>
+    <div>
+      <button id="runCSP">Run CSP
+        <span id="loadingIndicator"></span>
+      </button>
+      </div>
+    <div id="timer"></div>
+    <div id="status"></div>
     <div>
     <script src="script.js"></script>
   </div>

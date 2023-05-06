@@ -1,6 +1,7 @@
 function cleanPage() {
     d3.select("#timer").text("");
     d3.select('#ShowLogs').html(' ');
+    d3.select('#status').html(' ');
 }
 
 function vizCSPInProgress(loadingIndicator, runCSPButton) {

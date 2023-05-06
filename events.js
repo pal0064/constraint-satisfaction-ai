@@ -7,6 +7,15 @@ function defineMapChangeEvent(svg) {
 
 }
 
+function defineColorChangeEvent(svg) {
+    d3.select('#numColors')
+        .on('change', () => {
+            cleanPage()
+            createMap(svg);
+        });
+
+}
+
 function defineRunCSPEvent(svg, allColors) {
     document.getElementById("runCSP").addEventListener("click", async function() {
         cleanPage()
