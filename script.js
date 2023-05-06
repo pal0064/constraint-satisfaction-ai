@@ -10,6 +10,7 @@ var svg = d3.select("body")
 const allColors = ["red", "green", "blue", "yellow", "purple", "orange", "pink"];
 
 createMap(svg)
+defineColorChangeEvent(svg)
 defineMapChangeEvent(svg)
 defineRunCSPEvent(svg, allColors)
 checkSearchOptions()

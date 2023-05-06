@@ -68,13 +68,18 @@ function assignColors(data) {
     return true;
 }
 
+function postProcessing(data){
+    if (checkAllStates(data)) {
+        document.getElementById("status").innerHTML = `Solution Status:  Found`;
+    } else {
+        document.getElementById("status").innerHTML = `Solution Status: Could not find a solution`;
+    }
+
+}
+
 async function createMapUsingBackTracking(svg, data) {
     assignColors(data);
-    if (checkAllStates(data)) {
-        alert("Solution Found");
-    } else {
-        alert("Could not find a solution");
-    }
+    postProcessing(data)
     createMapColoredViz(svg, data)
 }
 
@@ -215,11 +220,7 @@ async function createMapUsingForwardChecking(svg, data, colors) {
         let state = data.features[i]
         state.color = finalSolution[state.properties.STATE_NAME]
     }
-    if (checkAllStates(data)) {
-        alert("Solution Found");
-    } else {
-        alert("Could not find a solution");
-    }
+    postProcessing(data)
     createMapColoredViz(svg, data)
 }
 

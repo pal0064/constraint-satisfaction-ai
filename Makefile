@@ -4,5 +4,5 @@ format:
 	js-beautify -r *.js
 
 install-deps:
-	pip install js-beautify
+	pip install js-beautify selenium 
 	
