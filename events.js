@@ -38,11 +38,11 @@ function checkSearchOptions() {
             } else {
                 selectionFC.html(`
                    Heuristic: 
-                   <input type="radio" id="mrv" name="forward_checking_options" value="mrv">
+                   <input type="radio" id="mrv" name="forward_checking_options" value="mrv" checked>
                    <label for="mrv">Minimum Remaining Values</label>
                    <input type="radio" id="dh" name="forward_checking_options" value="dh">
                    <label for="dh">Degree Heuristic</label>
-                   <input type="radio" id="noh" name="forward_checking_options" value="noh" checked>
+                   <input type="radio" id="noh" name="forward_checking_options" value="noh">
                    <label for="noh">None</label>
                    `)
             }
